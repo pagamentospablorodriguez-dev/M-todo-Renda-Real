@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Método Renda Real — Seu Guia Completo</title>
+<style>
+  :root {
+    --preto: #0a0a0a;
+    --preto2: #111111;
+    --preto3: #1a1a1a;
+    --preto4: #222222;
+    --amarelo: #F5C518;
+    --amarelo-escuro: #c49b0a;
+    --amarelo-claro: #fff3b0;
+    --amarelo-suave: #2a2200;
+    --cinza-claro: #e0e0e0;
+    --cinza-medio: #888;
+    --branco: #ffffff;
+    --branco-suave: #f5f5f5;
+    --verde: #22c55e;
+    --verde-escuro: #166534;
+    --fonte: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    --raio: 12px;
+    --raio-grande: 20px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--preto);
+    color: var(--branco);
+    font-family: var(--fonte);
+    line-height: 1.7;
+    font-size: 16px;
+  }
+
+  /* ===== BARRA DE PROGRESSO ===== */
+  #barra-progresso {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: var(--amarelo);
+    z-index: 9999;
+    transition: width 0.2s ease;
+    width: 0%;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    background: var(--preto2);
+    border-bottom: 1px solid #2a2a2a;
+    padding: 0 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+  .logo {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--amarelo);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .progresso-texto {
+    font-size: 12px;
+    color: var(--cinza-medio);
+  }
+  .progresso-texto span { color: var(--amarelo); font-weight: 600; }
+
+  /* ===== LAYOUT ===== */
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* ===== SEÇÕES ===== */
+  section {
+    padding: 4rem 0;
+    border-bottom: 1px solid #1e1e1e;
+  }
+  section:last-of-type { border-bottom: none; }
+
+  /* ===== HERO ===== */
+  .hero {
+    background: var(--preto2);
+    padding: 4rem 1.5rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse, rgba(245,197,24,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .badge-boas-vindas {
+    display: inline-block;
+    background: var(--amarelo-suave);
+    border: 1px solid #4a3800;
+    color: var(--amarelo);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 6px 16px;
+    border-radius: 40px;
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    color: var(--branco);
+  }
+  .hero h1 em { color: var(--amarelo); font-style: normal; }
+  .hero-sub {
+    font-size: 18px;
+    color: #aaa;
+    max-width: 540px;
+    margin: 0 auto 2rem;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid #2a2a2a;
+  }
+  .stat-item { text-align: center; }
+  .stat-num {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--amarelo);
+    display: block;
+  }
+  .stat-label { font-size: 13px; color: #888; }
+
+  /* ===== ÍNDICE INTERATIVO ===== */
+  .indice {
+    background: var(--preto3);
+    border-radius: var(--raio-grande);
+    border: 1px solid #2a2a2a;
+    overflow: hidden;
+  }
+  .indice-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #2a2a2a;
+    font-size: 13px;
+    font-weight: 600;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .indice-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #1e1e1e;
+    cursor: pointer;
+    transition: background 0.15s;
+    text-decoration: none;
+    color: inherit;
+  }
+  .indice-item:last-child { border-bottom: none; }
+  .indice-item:hover { background: #1e1e1e; }
+  .indice-num {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--amarelo-suave);
+    border: 1px solid #4a3800;
+    color: var(--amarelo);
+    font-size: 13px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .indice-info { flex: 1; }
+  .indice-titulo { font-size: 15px; font-weight: 600; color: var(--branco); }
+  .indice-desc { font-size: 13px; color: #888; margin-top: 2px; }
+  .indice-seta { color: #444; font-size: 18px; }
+  .indice-item:hover .indice-seta { color: var(--amarelo); }
+
+  /* ===== TÍTULOS DE SEÇÃO ===== */
+  .secao-num {
+    display: inline-block;
+    background: var(--amarelo);
+    color: var(--preto);
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 4px 12px;
+    border-radius: 40px;
+    margin-bottom: 1rem;
+  }
+  .secao-titulo {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 1rem;
+    color: var(--branco);
+  }
+  .secao-titulo em { color: var(--amarelo); font-style: normal; }
+  .secao-intro {
+    font-size: 17px;
+    color: #aaa;
+    margin-bottom: 2rem;
+    max-width: 620px;
+  }
+
+  /* ===== CARDS ===== */
+  .card {
+    background: var(--preto3);
+    border: 1px solid #2a2a2a;
+    border-radius: var(--raio);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .card-amarelo {
+    background: #1a1400;
+    border-color: #3a2e00;
+  }
+  .card-verde {
+    background: #0a1a0f;
+    border-color: #1a3a1f;
+  }
+  .card-titulo {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--branco);
+    margin-bottom: 0.5rem;
+  }
+  .card-corpo { color: #bbb; font-size: 15px; line-height: 1.7; }
+
+  /* ===== CITAÇÃO DESTAQUE ===== */
+  .citacao {
+    border-left: 3px solid var(--amarelo);
+    padding: 1rem 1.5rem;
+    background: #141200;
+    border-radius: 0 var(--raio) var(--raio) 0;
+    margin: 1.5rem 0;
+    font-size: 17px;
+    color: var(--cinza-claro);
+    font-style: italic;
+  }
+
+  /* ===== CHECKLIST ===== */
+  .checklist { list-style: none; }
+  .checklist li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid #1e1e1e;
+    font-size: 15px;
+    color: #ccc;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .check-icon {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: #0a1a0f;
+    border: 1px solid #1a3a1f;
+    color: var(--verde);
+    font-size: 12px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .check-texto strong { color: var(--branco); font-weight: 600; }
+
+  /* ===== TAREFA DIÁRIA (interativa) ===== */
+  .tarefa-container { margin-top: 2rem; }
+  .tarefa-titulo {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #888;
+    margin-bottom: 1rem;
+  }
+  .tarefa-card {
+    background: var(--preto3);
+    border: 1px solid #2a2a2a;
+    border-radius: var(--raio);
+    overflow: hidden;
+  }
+  .tarefa-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid #222;
+    background: var(--preto4);
+  }
+  .tarefa-nav-btn {
+    background: #1e1e1e;
+    border: 1px solid #333;
+    color: var(--branco);
+    padding: 6px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.15s;
+  }
+  .tarefa-nav-btn:hover { background: #2a2a2a; border-color: #444; }
+  .tarefa-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .tarefa-dia-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--amarelo);
+  }
+  .tarefa-corpo { padding: 1.5rem; }
+  .tarefa-dia-nome {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--branco);
+    margin-bottom: 0.25rem;
+  }
+  .tarefa-dia-objetivo {
+    font-size: 13px;
+    color: var(--cinza-medio);
+    margin-bottom: 1.25rem;
+  }
+  .tarefa-itens { list-style: none; }
+  .tarefa-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid #1e1e1e;
+    cursor: pointer;
+  }
+  .tarefa-item:last-child { border-bottom: none; }
+  .tarefa-checkbox {
+    width: 20px; height: 20px;
+    border: 1.5px solid #444;
+    border-radius: 6px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    color: var(--preto);
+    font-size: 12px;
+  }
+  .tarefa-item.done .tarefa-checkbox {
+    background: var(--amarelo);
+    border-color: var(--amarelo);
+  }
+  .tarefa-item.done .tarefa-texto { color: #555; text-decoration: line-through; }
+  .tarefa-texto { font-size: 15px; color: #ccc; }
+  .tarefa-progresso-bar-container {
+    padding: 1rem 1.25rem;
+    border-top: 1px solid #1e1e1e;
+    background: var(--preto4);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .tarefa-progresso-bar {
+    flex: 1;
+    height: 4px;
+    background: #2a2a2a;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .tarefa-progresso-fill {
+    height: 100%;
+    background: var(--amarelo);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+  }
+  .tarefa-progresso-pct { font-size: 12px; color: #888; min-width: 36px; text-align: right; }
+
+  /* ===== GRID 2 COLUNAS ===== */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+
+  /* ===== TABELA DE MODELOS ===== */
+  .modelo-card {
+    background: var(--preto3);
+    border: 1px solid #2a2a2a;
+    border-radius: var(--raio-grande);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .modelo-card.destaque {
+    border-color: var(--amarelo-escuro);
+    background: #121000;
+  }
+  .modelo-badge {
+    position: absolute;
+    top: 1.25rem; right: 1.25rem;
+    background: var(--amarelo);
+    color: var(--preto);
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 10px;
+    border-radius: 40px;
+  }
+  .modelo-icon {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    background: #1e1800;
+    border: 1px solid #3a2e00;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    margin-bottom: 1.25rem;
+  }
+  .modelo-nome { font-size: 20px; font-weight: 800; margin-bottom: 0.5rem; }
+  .modelo-desc { font-size: 14px; color: #888; margin-bottom: 1.5rem; }
+  .modelo-lista { list-style: none; }
+  .modelo-lista li {
+    display: flex; gap: 8px;
+    font-size: 14px; color: #bbb;
+    padding: 6px 0;
+    border-bottom: 1px solid #1e1e1e;
+    align-items: flex-start;
+  }
+  .modelo-lista li:last-child { border-bottom: none; }
+  .modelo-lista li::before { content: '→'; color: var(--amarelo); font-size: 13px; margin-top: 3px; flex-shrink: 0; }
+  .modelo-metrica {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid #222;
+  }
+  .metrica-item { flex: 1; text-align: center; }
+  .metrica-valor { font-size: 18px; font-weight: 700; color: var(--amarelo); display: block; }
+  .metrica-label { font-size: 11px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* ===== SCRIPTS DE VENDA ===== */
+  .script-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .script-tab {
+    background: #1e1e1e;
+    border: 1px solid #2a2a2a;
+    color: #888;
+    padding: 7px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.15s;
+  }
+  .script-tab.active, .script-tab:hover {
+    background: var(--amarelo);
+    border-color: var(--amarelo);
+    color: var(--preto);
+    font-weight: 700;
+  }
+  .script-conteudo { display: none; }
+  .script-conteudo.active { display: block; }
+  .script-box {
+    background: var(--preto3);
+    border: 1px solid #2a2a2a;
+    border-radius: var(--raio);
+    padding: 1.5rem;
+  }
+  .script-box-titulo {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--amarelo);
+    margin-bottom: 1rem;
+  }
+  .script-texto {
+    font-size: 15px;
+    color: #ccc;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    font-family: var(--fonte);
+  }
+  .script-texto strong { color: var(--branco); font-weight: 600; }
+  .btn-copiar {
+    margin-top: 1rem;
+    background: transparent;
+    border: 1px solid #333;
+    color: #888;
+    padding: 8px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+  }
+  .btn-copiar:hover { border-color: var(--amarelo); color: var(--amarelo); }
+  .btn-copiar.copiado { border-color: var(--verde); color: var(--verde); }
+
+  /* ===== OBJEÇÕES ===== */
+  .objecao-item {
+    background: var(--preto3);
+    border: 1px solid #2a2a2a;
+    border-radius: var(--raio);
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+  }
+  .objecao-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .objecao-header:hover { background: #1e1e1e; }
+  .objecao-pergunta {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--branco);
+    display: flex; gap: 10px; align-items: center;
+  }
+  .objecao-pergunta::before {
+    content: '?';
+    width: 24px; height: 24px;
+    background: #1e1400;
+    border: 1px solid #3a2800;
+    color: var(--amarelo);
+    border-radius: 50%;
+    font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .objecao-seta { color: #555; transition: transform 0.2s; font-size: 18px; }
+  .objecao-item.aberto .objecao-seta { transform: rotate(180deg); color: var(--amarelo); }
+  .objecao-resposta {
+    display: none;
+    padding: 0 1.25rem 1.25rem 1.25rem;
+    font-size: 15px;
+    color: #bbb;
+    line-height: 1.8;
+  }
+  .objecao-item.aberto .objecao-resposta { display: block; }
+
+  /* ===== ESCALADA ===== */
+  .escala-item {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid #1e1e1e;
+  }
+  .escala-item:last-child { border-bottom: none; }
+  .escala-seta-col {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    padding-top: 4px;
+  }
+  .escala-bolinha {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--amarelo);
+    flex-shrink: 0;
+  }
+  .escala-linha { width: 2px; flex: 1; background: #2a2a2a; min-height: 30px; }
+  .escala-nome { font-size: 18px; font-weight: 700; color: var(--branco); margin-bottom: 0.25rem; }
+  .escala-meta { font-size: 14px; color: var(--amarelo); font-weight: 600; margin-bottom: 0.5rem; }
+  .escala-desc { font-size: 14px; color: #888; line-height: 1.7; }
+
+  /* ===== MENTALIDADE ===== */
+  .mentalidade-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+  .mentalidade-card {
+    background: var(--preto3);
+    border: 1px solid #2a2a2a;
+    border-radius: var(--raio);
+    padding: 1.25rem;
+  }
+  .mentalidade-icon {
+    font-size: 28px;
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+  .mentalidade-titulo { font-size: 15px; font-weight: 700; color: var(--branco); margin-bottom: 0.5rem; }
+  .mentalidade-texto { font-size: 14px; color: #888; line-height: 1.6; }
+
+  /* ===== COMPARATIVO ANTES/DEPOIS ===== */
+  .antes-depois {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: #2a2a2a;
+    border-radius: var(--raio);
+    overflow: hidden;
+    margin: 1.5rem 0;
+  }
+  .antes-col, .depois-col { padding: 1.5rem; }
+  .antes-col { background: #120808; }
+  .depois-col { background: #081208; }
+  .col-header {
+    font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1.5px;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .antes-col .col-header { color: #c74444; }
+  .depois-col .col-header { color: var(--verde); }
+  .col-item {
+    display: flex; gap: 8px;
+    font-size: 14px; color: #bbb;
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+  .antes-col .col-item::before { content: '✕'; color: #c74444; font-size: 12px; margin-top: 2px; flex-shrink: 0; }
+  .depois-col .col-item::before { content: '✓'; color: var(--verde); font-size: 12px; margin-top: 2px; flex-shrink: 0; }
+
+  /* ===== CTA FINAL ===== */
+  .cta-final {
+    text-align: center;
+    padding: 5rem 1.5rem;
+    background: var(--preto2);
+    border-top: 1px solid #2a2a2a;
+  }
+  .cta-titulo { font-size: 2rem; font-weight: 800; margin-bottom: 1rem; }
+  .cta-titulo em { color: var(--amarelo); font-style: normal; }
+  .cta-sub { font-size: 17px; color: #888; max-width: 480px; margin: 0 auto 2.5rem; }
+  .cta-btn {
+    display: inline-block;
+    background: var(--amarelo);
+    color: var(--preto);
+    font-size: 17px;
+    font-weight: 800;
+    padding: 16px 40px;
+    border-radius: 40px;
+    text-decoration: none;
+    letter-spacing: 0.3px;
+    transition: transform 0.15s, box-shadow 0.15s;
+    cursor: pointer;
+    border: none;
+  }
+  .cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(245,197,24,0.3);
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 600px) {
+    .hero-stats { gap: 1.5rem; }
+    .stat-num { font-size: 22px; }
+    .antes-depois { grid-template-columns: 1fr; }
+    .script-tabs { flex-direction: column; }
+    .script-tab { text-align: center; }
+  }
+
+  /* ===== SMOOTH SCROLL ===== */
+  html { scroll-behavior: smooth; }
+</style>
+</head>
+<body>
+
+<div id="barra-progresso"></div>
+
+<header>
+  <div class="logo">⚡ Método Renda Real</div>
+  <div class="progresso-texto">Progresso: <span id="pct-leitura">0%</span> lido</div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="container">
+    <div class="badge-boas-vindas">✦ Bem-vindo ao material completo</div>
+    <h1>Seu guia definitivo para <em>gerar renda real</em> pela internet</h1>
+    <p class="hero-sub">Tudo que você precisa — do zero à primeira venda e além. Leia, aplique, e veja o resultado aparecer.</p>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-num">5</span>
+        <span class="stat-label">Módulos completos</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">7</span>
+        <span class="stat-label">Dias até 1ª venda</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">3</span>
+        <span class="stat-label">Modelos de negócio</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">7</span>
+        <span class="stat-label">Scripts prontos</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ÍNDICE -->
+<section id="indice-sec">
+  <div class="container">
+    <p class="secao-num">Índice</p>
+    <h2 class="secao-titulo">O que você vai aprender</h2>
+    <p class="secao-intro">Cada módulo foi construído para te levar da teoria à ação. Clique para navegar diretamente ao conteúdo.</p>
+    <div class="indice">
+      <div class="indice-header">Conteúdo completo</div>
+      <a href="#mod1" class="indice-item">
+        <div class="indice-num">1</div>
+        <div class="indice-info">
+          <div class="indice-titulo">Mentalidade dos Que Faturam</div>
+          <div class="indice-desc">As crenças que travam você — e como destravar</div>
+        </div>
+        <div class="indice-seta">›</div>
+      </a>
+      <a href="#mod2" class="indice-item">
+        <div class="indice-num">2</div>
+        <div class="indice-info">
+          <div class="indice-titulo">Os 3 Negócios Digitais com Maior Margem</div>
+          <div class="indice-desc">Escolha o modelo certo para o seu perfil</div>
+        </div>
+        <div class="indice-seta">›</div>
+      </a>
+      <a href="#mod3" class="indice-item">
+        <div class="indice-num">3</div>
+        <div class="indice-info">
+          <div class="indice-titulo">Primeira Venda em 7 Dias</div>
+          <div class="indice-desc">Checklist diário com ações concretas</div>
+        </div>
+        <div class="indice-seta">›</div>
+      </a>
+      <a href="#mod4" class="indice-item">
+        <div class="indice-num">4</div>
+        <div class="indice-info">
+          <div class="indice-titulo">Máquina de Vendas no Automático</div>
+          <div class="indice-desc">Copy, canais e fluxo que escala</div>
+        </div>
+        <div class="indice-seta">›</div>
+      </a>
+      <a href="#mod5" class="indice-item">
+        <div class="indice-num">5</div>
+        <div class="indice-info">
+          <div class="indice-titulo">De R$ 1.000 para R$ 10.000/mês</div>
+          <div class="indice-desc">A estratégia de escala real</div>
+        </div>
+        <div class="indice-seta">›</div>
+      </a>
+      <a href="#bonus" class="indice-item">
+        <div class="indice-num">★</div>
+        <div class="indice-info">
+          <div class="indice-titulo">Bônus: Scripts de Venda Prontos</div>
+          <div class="indice-desc">7 scripts para copiar e usar agora</div>
+        </div>
+        <div class="indice-seta">›</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- MÓDULO 1 -->
+<section id="mod1">
+  <div class="container">
+    <span class="secao-num">Módulo 01</span>
+    <h2 class="secao-titulo">A Mentalidade dos<br><em>Que Faturam</em></h2>
+    <p class="secao-intro">Antes de qualquer estratégia, existe uma batalha invisível acontecendo na sua cabeça. Quem vence essa batalha, vence o jogo financeiro.</p>
+
+    <div class="citacao">"Não é sobre o que você sabe. É sobre o que você acredita ser possível para você."</div>
+
+    <p style="color:#bbb; font-size:16px; margin-bottom:1.5rem; line-height:1.8">
+      A maioria das pessoas que fracassam nos negócios digitais não fracassa por falta de estratégia. Fracassa por excesso de autocensura — aquela voz interna que diz <em style="color:#888">"quem sou eu para ganhar dinheiro assim?"</em>, <em style="color:#888">"vai dar errado"</em>, <em style="color:#888">"não é pra mim"</em>.
+    </p>
+    <p style="color:#bbb; font-size:16px; margin-bottom:2rem; line-height:1.8">
+      O primeiro passo não é abrir uma conta em plataforma. É entender os padrões que separam quem age de quem apenas observa.
+    </p>
+
+    <div class="mentalidade-grid">
+      <div class="mentalidade-card">
+        <span class="mentalidade-icon">🎯</span>
+        <div class="mentalidade-titulo">Foco no processo, não no resultado</div>
+        <div class="mentalidade-texto">Quem fica olhando pro dinheiro antes de fazer a venda nunca fecha nada. Foque 100% na ação diária — o resultado é consequência.</div>
+      </div>
+      <div class="mentalidade-card">
+        <span class="mentalidade-icon">⚡</span>
+        <div class="mentalidade-titulo">Imperfeito e publicado > perfeito e na gaveta</div>
+        <div class="mentalidade-texto">O maior inimigo do empreendedor iniciante é o perfeccionismo. Uma mensagem enviada hoje, mesmo que imperfeita, gera mais resultado que o pitch perfeito que nunca saiu.</div>
+      </div>
+      <div class="mentalidade-card">
+        <span class="mentalidade-icon">📐</span>
+        <div class="mentalidade-titulo">Mede o que importa</div>
+        <div class="mentalidade-texto">Não conta views, curtidas ou seguidores. Conta contatos feitos, respostas recebidas e vendas fechadas. Só existe o que gera receita.</div>
+      </div>
+      <div class="mentalidade-card">
+        <span class="mentalidade-icon">🔄</span>
+        <div class="mentalidade-titulo">Testa rápido, ajusta rápido</div>
+        <div class="mentalidade-texto">Nenhum negócio digital funciona perfeitamente na primeira tentativa. O que diferencia quem chega lá é a capacidade de testar, medir e ajustar sem drama.</div>
+      </div>
+      <div class="mentalidade-card">
+        <span class="mentalidade-icon">🧱</span>
+        <div class="mentalidade-titulo">Constrói ativos, não tarefas</div>
+        <div class="mentalidade-texto">Um emprego te paga pelo tempo. Um negócio digital bem estruturado te paga pelo valor que você criou uma vez — e continua gerando resultado.</div>
+      </div>
+      <div class="mentalidade-card">
+        <span class="mentalidade-icon">💬</span>
+        <div class="mentalidade-titulo">Vende sem vergonha</div>
+        <div class="mentalidade-texto">Vender é ajudar alguém a resolver um problema. Se você tem vergonha de oferecer sua solução, você está deixando pessoas sem ajuda. Mude a perspectiva.</div>
+      </div>
+    </div>
+
+    <div class="antes-depois" style="margin-top:2.5rem">
+      <div class="antes-col">
+        <div class="col-header">Mentalidade que trava</div>
+        <div class="col-item">Espero estar pronto para começar</div>
+        <div class="col-item">Preciso de mais informação antes de agir</div>
+        <div class="col-item">E se não funcionar?</div>
+        <div class="col-item">Isso é pra quem já tem audiência</div>
+        <div class="col-item">Tenho medo de parecer vendedor</div>
+      </div>
+      <div class="depois-col">
+        <div class="col-header">Mentalidade que fatura</div>
+        <div class="col-item">Começo hoje e melhoro no caminho</div>
+        <div class="col-item">Aplico agora com o que sei</div>
+        <div class="col-item">O que aprendo se não funcionar?</div>
+        <div class="col-item">Começo do zero igual todo mundo começou</div>
+        <div class="col-item">Oferecer valor é um serviço, não uma imposição</div>
+      </div>
+    </div>
+
+    <div class="card card-amarelo" style="margin-top:2rem">
+      <div class="card-titulo">⚡ Exercício agora (5 minutos)</div>
+      <div class="card-corpo">
+        Abra o bloco de notas no celular. Escreva 3 crenças que você tem sobre dinheiro que te limitam. Depois, ao lado de cada uma, escreva a versão oposta — como uma pessoa bem-sucedida pensaria sobre isso. Guarde e releia todo dia por 7 dias.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MÓDULO 2 -->
+<section id="mod2">
+  <div class="container">
+    <span class="secao-num">Módulo 02</span>
+    <h2 class="secao-titulo">Os <em>3 Negócios Digitais</em><br>com Maior Margem</h2>
+    <p class="secao-intro">Você não precisa inventar nada novo. Precisa escolher o modelo certo para o seu perfil — e executar com consistência.</p>
+
+    <div style="display:flex; flex-direction:column; gap:1.5rem; margin-top:1.5rem">
+
+      <!-- Modelo 1 -->
+      <div class="modelo-card destaque">
+        <div class="modelo-badge">⭐ Mais indicado para iniciantes</div>
+        <div class="modelo-icon">🤝</div>
+        <div class="modelo-nome">Marketing de Afiliados</div>
+        <div class="modelo-desc">Você promove produtos de terceiros e recebe comissões. Sem estoque, sem suporte, sem criar nada.</div>
+        <ul class="modelo-lista">
+          <li>Plataformas: Hotmart, Eduzz, Monetizze, Amazon Afiliados</li>
+          <li>Comissões de 20% a 80% por venda</li>
+          <li>Começa hoje, sem nenhum investimento</li>
+          <li>Pode ser 100% anônimo — sem aparecer</li>
+          <li>Funciona em WhatsApp, grupos, e-mail e redes</li>
+        </ul>
+        <div class="modelo-metrica">
+          <div class="metrica-item">
+            <span class="metrica-valor">R$0</span>
+            <span class="metrica-label">Investimento</span>
+          </div>
+          <div class="metrica-item">
+            <span class="metrica-valor">7 dias</span>
+            <span class="metrica-label">Até 1ª venda</span>
+          </div>
+          <div class="metrica-item">
+            <span class="metrica-valor">80%</span>
+            <span class="metrica-label">Margem máxima</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modelo 2 -->
+      <div class="modelo-card">
+        <div class="modelo-icon">🛠️</div>
+        <div class="modelo-nome">Serviços Digitais</div>
+        <div class="modelo-desc">Você entrega serviços que as empresas precisam e não têm tempo de fazer internamente.</div>
+        <ul class="modelo-lista">
+          <li>Exemplos: gestão de tráfego pago, edição de vídeos, copywriting, design, automações</li>
+          <li>Ticket de R$500 a R$3.000 por cliente/mês</li>
+          <li>3 a 5 clientes = renda sólida e previsível</li>
+          <li>Alta demanda em empresas de todos os tamanhos</li>
+          <li>Você aprende enquanto ganha</li>
+        </ul>
+        <div class="modelo-metrica">
+          <div class="metrica-item">
+            <span class="metrica-valor">R$0–200</span>
+            <span class="metrica-label">Investimento</span>
+          </div>
+          <div class="metrica-item">
+            <span class="metrica-valor">2 semanas</span>
+            <span class="metrica-label">Até 1º cliente</span>
+          </div>
+          <div class="metrica-item">
+            <span class="metrica-valor">90%</span>
+            <span class="metrica-label">Margem média</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modelo 3 -->
+      <div class="modelo-card">
+        <div class="modelo-icon">📦</div>
+        <div class="modelo-nome">Revenda Digital / Dropshipping</div>
+        <div class="modelo-desc">Você vende produtos físicos sem precisar de estoque ou logística própria.</div>
+        <ul class="modelo-lista">
+          <li>Plataformas: Mercado Livre, Shopee, Shopify</li>
+          <li>Fornecedores nacionais com envio direto ao cliente</li>
+          <li>Margem de 30% a 200% por produto</li>
+          <li>Escala com anúncios pagos quando tiver capital</li>
+          <li>Nichos específicos têm menos concorrência e mais lucro</li>
+        </ul>
+        <div class="modelo-metrica">
+          <div class="metrica-item">
+            <span class="metrica-valor">R$100–500</span>
+            <span class="metrica-label">Investimento</span>
+          </div>
+          <div class="metrica-item">
+            <span class="metrica-valor">3 semanas</span>
+            <span class="metrica-label">Até 1ª venda</span>
+          </div>
+          <div class="metrica-item">
+            <span class="metrica-valor">200%</span>
+            <span class="metrica-label">Margem máxima</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-amarelo" style="margin-top:2rem">
+      <div class="card-titulo">📌 Como escolher o modelo certo para você</div>
+      <div class="card-corpo">
+        <strong style="color:#fff">Afiliados:</strong> Se você quer começar hoje, sem dinheiro, sem aparecer e sem criar nada — comece aqui.<br><br>
+        <strong style="color:#fff">Serviços:</strong> Se você tem alguma habilidade (ou quer aprender) e prefere ter contratos mensais com renda previsível.<br><br>
+        <strong style="color:#fff">Revenda:</strong> Se você gosta de produto físico, tem R$200+ para testar e não se importa de gerenciar anúncios e pedidos.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MÓDULO 3 -->
+<section id="mod3">
+  <div class="container">
+    <span class="secao-num">Módulo 03</span>
+    <h2 class="secao-titulo">Sua <em>Primeira Venda</em><br>em 7 Dias</h2>
+    <p class="secao-intro">Aqui não existe teoria. Existe um checklist diário exato. Execute cada tarefa na ordem — e você terá sua primeira venda em uma semana.</p>
+
+    <div class="tarefa-container">
+      <p class="tarefa-titulo">📋 Plano de ação — dia a dia</p>
+      <div class="tarefa-card">
+        <div class="tarefa-nav">
+          <button class="tarefa-nav-btn" id="btn-anterior" onclick="mudarDia(-1)" disabled>← Anterior</button>
+          <span class="tarefa-dia-label" id="dia-label">Dia 1 de 7</span>
+          <button class="tarefa-nav-btn" id="btn-proximo" onclick="mudarDia(1)">Próximo →</button>
+        </div>
+        <div class="tarefa-corpo">
+          <div class="tarefa-dia-nome" id="dia-nome"></div>
+          <div class="tarefa-dia-objetivo" id="dia-objetivo"></div>
+          <ul class="tarefa-itens" id="tarefa-lista"></ul>
+        </div>
+        <div class="tarefa-progresso-bar-container">
+          <div class="tarefa-progresso-bar">
+            <div class="tarefa-progresso-fill" id="tarefa-fill" style="width:0%"></div>
+          </div>
+          <span class="tarefa-progresso-pct" id="tarefa-pct">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:1.5rem">
+      <div class="card-titulo">💡 A regra de ouro dos 7 dias</div>
+      <div class="card-corpo">
+        Não pule para o dia seguinte sem completar o atual. O checklist foi construído em uma progressão — cada dia prepara o terreno para o próximo. Se travou em alguma tarefa, continue nela até concluir. Velocidade é menos importante que consistência.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MÓDULO 4 -->
+<section id="mod4">
+  <div class="container">
+    <span class="secao-num">Módulo 04</span>
+    <h2 class="secao-titulo">A Máquina de Vendas<br><em>no Automático</em></h2>
+    <p class="secao-intro">Depois da primeira venda, o objetivo é criar um sistema que funciona enquanto você dorme. Aqui está a estrutura.</p>
+
+    <div class="grid-2" style="margin-bottom:1.5rem">
+      <div class="card card-verde">
+        <div class="card-titulo">🎯 O que é uma máquina de vendas</div>
+        <div class="card-corpo">É um conjunto de ferramentas e mensagens que captura a atenção de um potencial cliente, nutre o relacionamento com ele e converte em venda — sem você precisar estar presente.</div>
+      </div>
+      <div class="card card-verde">
+        <div class="card-titulo">🔧 Os 4 componentes essenciais</div>
+        <div class="card-corpo">
+          <strong style="color:#fff">1. Isca</strong> — algo de valor gratuito que atrai<br>
+          <strong style="color:#fff">2. Captura</strong> — onde a pessoa deixa contato<br>
+          <strong style="color:#fff">3. Sequência</strong> — mensagens que educam e vendem<br>
+          <strong style="color:#fff">4. Oferta</strong> — o momento certo de apresentar o produto
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-size:18px; font-weight:700; margin:2rem 0 1rem; color:var(--branco)">Os canais que mais convertem para iniciantes</h3>
+    <ul class="checklist">
+      <li>
+        <div class="check-icon">✓</div>
+        <div class="check-texto"><strong>WhatsApp / Telegram:</strong> Canal mais direto e com maior taxa de abertura do Brasil. Grupos segmentados e listas de transmissão geram vendas todos os dias.</div>
+      </li>
+      <li>
+        <div class="check-icon">✓</div>
+        <div class="check-texto"><strong>E-mail marketing:</strong> Um dos canais com melhor ROI no longo prazo. Você não depende de algoritmo — sua lista é seu ativo.</div>
+      </li>
+      <li>
+        <div class="check-icon">✓</div>
+        <div class="check-texto"><strong>Stories e conteúdo orgânico:</strong> Para quem quer aparecer — mas não é obrigatório.</div>
+      </li>
+      <li>
+        <div class="check-icon">✓</div>
+        <div class="check-texto"><strong>Tráfego pago:</strong> Quando você já tem o modelo validado, escala o que funciona com anúncios. Nunca trafegue antes de validar organicamente.</div>
+      </li>
+    </ul>
+
+    <h3 style="font-size:18px; font-weight:700; margin:2rem 0 1rem; color:var(--branco)">Como escrever uma mensagem que vende</h3>
+    <div class="card card-amarelo">
+      <div class="card-titulo">A fórmula PAS — dor, agitação, solução</div>
+      <div class="card-corpo">
+        <strong style="color:#fff">Problema:</strong> Identifique a dor real do seu cliente. Seja específico. Quanto mais preciso, mais a pessoa sente que você a entende.<br><br>
+        <strong style="color:#fff">Agitação:</strong> Mostre o que acontece se a pessoa não resolver. Não para assustar — para que ela entenda a urgência real.<br><br>
+        <strong style="color:#fff">Solução:</strong> Apresente sua oferta como o caminho natural para sair desse problema. Não venda o produto — venda o resultado que ele entrega.
+      </div>
+    </div>
+
+    <h3 style="font-size:18px; font-weight:700; margin:2rem 0 1rem; color:var(--branco)">Respondendo as 7 objeções mais comuns</h3>
+    <div id="objecoes">
+      <div class="objecao-item">
+        <div class="objecao-header" onclick="toggleObjecao(this)">
+          <div class="objecao-pergunta">Não tenho dinheiro agora</div>
+          <div class="objecao-seta">⌄</div>
+        </div>
+        <div class="objecao-resposta">
+          "Entendo completamente. Mas deixa eu te fazer uma pergunta: o que vai mudar em 3 meses se você continuar como está? Esse investimento foi criado exatamente para quem está nessa situação. Parcelamos em até 12x — o que equivale a um cafezinho por dia. O custo real é continuar sem resultado."
+        </div>
+      </div>
+      <div class="objecao-item">
+        <div class="objecao-header" onclick="toggleObjecao(this)">
+          <div class="objecao-pergunta">Não sei se vai funcionar para mim</div>
+          <div class="objecao-seta">⌄</div>
+        </div>
+        <div class="objecao-resposta">
+          "Essa dúvida é completamente normal e honesta. Por isso existe a garantia de 7 dias: você testa sem risco. Se em 7 dias seguindo o passo a passo você não ver valor, você recebe 100% de volta. Mas te digo: quem aplica, vê resultado. A questão é: você está disposto a aplicar?"
+        </div>
+      </div>
+      <div class="objecao-item">
+        <div class="objecao-header" onclick="toggleObjecao(this)">
+          <div class="objecao-pergunta">Já tentei antes e não funcionou</div>
+          <div class="objecao-seta">⌄</div>
+        </div>
+        <div class="objecao-resposta">
+          "Conta mais sobre o que você tentou. Na maioria dos casos, o problema não foi a pessoa — foi o método ou a plataforma errada. A diferença aqui é a simplicidade: sem tecnologia complicada, sem precisar aparecer, sem necessidade de audiência. Um checklist diário que qualquer pessoa consegue seguir."
+        </div>
+      </div>
+      <div class="objecao-item">
+        <div class="objecao-header" onclick="toggleObjecao(this)">
+          <div class="objecao-pergunta">Não tenho tempo</div>
+          <div class="objecao-seta">⌄</div>
+        </div>
+        <div class="objecao-resposta">
+          "Quanto tempo você gasta rolando feed por dia? A maioria das pessoas tem 30 a 60 minutos disponíveis sem perceber. Nossos alunos que trabalham CLT têm resultados seguindo o plano com apenas 1 hora por dia. A questão é prioridade, não tempo."
+        </div>
+      </div>
+      <div class="objecao-item">
+        <div class="objecao-header" onclick="toggleObjecao(this)">
+          <div class="objecao-pergunta">Parece golpe / é mais um curso</div>
+          <div class="objecao-seta">⌄</div>
+        </div>
+        <div class="objecao-resposta">
+          "Sua desconfiança é saudável. Tem muito lixo no mercado. Por isso não peço que você confie em mim — peço que você confie na garantia: 7 dias, 100% de reembolso sem perguntas. Você testa com zero risco. Se for lixo, você não perde nada. Se for bom — e vai ser — você muda de patamar por R$97."
+        </div>
+      </div>
+      <div class="objecao-item">
+        <div class="objecao-header" onclick="toggleObjecao(this)">
+          <div class="objecao-pergunta">Não sei nada de tecnologia</div>
+          <div class="objecao-seta">⌄</div>
+        </div>
+        <div class="objecao-resposta">
+          "Esse foi exatamente o critério de criação do material: funcionar para quem não sabe nada de tecnologia. Você vai usar WhatsApp e plataformas que qualquer celular já tem. Nada de configurar sites, funis ou automações complexas. Se você sabe mandar mensagem, você consegue aplicar."
+        </div>
+      </div>
+      <div class="objecao-item">
+        <div class="objecao-header" onclick="toggleObjecao(this)">
+          <div class="objecao-pergunta">Preciso pensar / vou ver depois</div>
+          <div class="objecao-seta">⌄</div>
+        </div>
+        <div class="objecao-resposta">
+          "Respeitável. Mas me diz: o que exatamente você precisa pensar? Às vezes a gente fala 'vou pensar' quando na verdade está com medo de tentar e fracassar. Se for isso, entendo — mas aqui o risco é zero por 7 dias. Se for outra dúvida específica, eu respondo agora. O que está travando?"
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MÓDULO 5 -->
+<section id="mod5">
+  <div class="container">
+    <span class="secao-num">Módulo 05</span>
+    <h2 class="secao-titulo">De R$ 1.000 para<br><em>R$ 10.000 por mês</em></h2>
+    <p class="secao-intro">A estratégia de escala não é fazer mais do mesmo. É fazer a coisa certa na fase certa.</p>
+
+    <p style="color:#bbb; font-size:16px; line-height:1.8; margin-bottom:2rem">
+      A maioria das pessoas que chegam a R$1.000 ficam travadas ali por meses. Não porque o mercado não tem espaço — mas porque tentam escalar sem ter um processo estável. Escalar um negócio frágil só produz mais caos.
+    </p>
+
+    <div id="escala-steps">
+      <div class="escala-item">
+        <div class="escala-seta-col">
+          <div class="escala-bolinha"></div>
+          <div class="escala-linha"></div>
+        </div>
+        <div>
+          <div class="escala-nome">Fase 1 — Validação (R$0 a R$1.000/mês)</div>
+          <div class="escala-meta">Meta: sua primeira venda. Depois, as 10 primeiras.</div>
+          <div class="escala-desc">
+            Foco total em uma plataforma, um produto, um canal. Não diversifique agora. Aprenda a vender uma coisa muito bem antes de tentar vender muitas. Use os scripts do bônus. Pergunte para seus primeiros compradores o que os convenceu — esse feedback é ouro.
+          </div>
+        </div>
+      </div>
+      <div class="escala-item">
+        <div class="escala-seta-col">
+          <div class="escala-bolinha"></div>
+          <div class="escala-linha"></div>
+        </div>
+        <div>
+          <div class="escala-nome">Fase 2 — Consistência (R$1.000 a R$3.000/mês)</div>
+          <div class="escala-meta">Meta: vendas previsíveis toda semana.</div>
+          <div class="escala-desc">
+            Construa sua lista de contatos ativamente. Implante a sequência de mensagens automáticas. Documente o que funciona. Nessa fase você ainda faz tudo manualmente — mas está criando os sistemas que vão te libertar.
+          </div>
+        </div>
+      </div>
+      <div class="escala-item">
+        <div class="escala-seta-col">
+          <div class="escala-bolinha"></div>
+          <div class="escala-linha"></div>
+        </div>
+        <div>
+          <div class="escala-nome">Fase 3 — Automação (R$3.000 a R$6.000/mês)</div>
+          <div class="escala-meta">Meta: o negócio funcionar sem você estar presente.</div>
+          <div class="escala-desc">
+            Aqui você instala a automação. Ferramentas como ManyChat, E-goi ou ActiveCampaign passam a enviar as sequências de venda sem intervenção manual. Você sai do operacional e começa a trabalhar no estratégico.
+          </div>
+        </div>
+      </div>
+      <div class="escala-item">
+        <div class="escala-seta-col">
+          <div class="escala-bolinha"></div>
+          <div class="escala-linha"></div>
+        </div>
+        <div>
+          <div class="escala-nome">Fase 4 — Escala com tráfego (R$6.000 a R$10.000+/mês)</div>
+          <div class="escala-meta">Meta: crescimento previsível e controlado.</div>
+          <div class="escala-desc">
+            Somente aqui você investe em tráfego pago — porque agora você sabe que o processo converte. R$500 em anúncios bem segmentados no Facebook ou Google multiplicam o que já funciona organicamente. O modelo está provado: agora é combustível no motor.
+          </div>
+        </div>
+      </div>
+      <div class="escala-item">
+        <div class="escala-seta-col">
+          <div class="escala-bolinha"></div>
+        </div>
+        <div>
+          <div class="escala-nome">Fase 5 — Expansão (R$10.000+/mês)</div>
+          <div class="escala-meta">Meta: múltiplas fontes de receita.</div>
+          <div class="escala-desc">
+            Adicione um segundo produto, um segundo canal ou um segundo modelo de negócio. Contrate ajuda para tarefas operacionais. Você passa a trabalhar como dono, não como executante.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-amarelo" style="margin-top:2rem">
+      <div class="card-titulo">⚠️ O erro mais comum na escala</div>
+      <div class="card-corpo">
+        Tentar ir direto da Fase 1 para a Fase 4. Quem começa a pagar anúncios antes de ter o processo validado queima dinheiro e desiste achando que "não funciona para mim". Respeite as fases. Velocidade vem depois de consistência.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BÔNUS: SCRIPTS -->
+<section id="bonus">
+  <div class="container">
+    <span class="secao-num">★ Bônus exclusivo</span>
+    <h2 class="secao-titulo"><em>Scripts de Venda</em><br>Prontos para Usar</h2>
+    <p class="secao-intro">Copie, personalize com o nome do produto e do cliente, e envie. Esses scripts foram criados para os 7 momentos mais importantes do processo de venda.</p>
+
+    <div class="script-tabs" id="script-tabs">
+      <button class="script-tab active" onclick="mudarScript(0)">1ª Abordagem</button>
+      <button class="script-tab" onclick="mudarScript(1)">Follow-up</button>
+      <button class="script-tab" onclick="mudarScript(2)">Após ver o produto</button>
+      <button class="script-tab" onclick="mudarScript(3)">Urgência</button>
+      <button class="script-tab" onclick="mudarScript(4)">Pós-venda</button>
+      <button class="script-tab" onclick="mudarScript(5)">Pedir indicação</button>
+      <button class="script-tab" onclick="mudarScript(6)">Reativar contato frio</button>
+    </div>
+
+    <div id="script-conteudos">
+      <div class="script-conteudo active">
+        <div class="script-box">
+          <div class="script-box-titulo">Script 1 — Primeira abordagem</div>
+          <div class="script-texto" id="script-texto-0">Oi [Nome], tudo bem? Sou o [Seu nome].
+
+Você apareceu aqui e achei que podia ter a ver com algo que eu descobri recentemente.
+
+Estava na mesma situação que você — sem tempo, sem saber por onde começar — quando encontrei um método que mudou minha renda de forma concreta.
+
+Não é promessa de ficar rico do nada. É um passo a passo real para gerar de R$1.000 a R$5.000/mês trabalhando de casa, sem aparecer e sem precisar ter produto próprio.
+
+Posso te passar mais detalhes? Leva 3 minutos para entender.</div>
+          <button class="btn-copiar" onclick="copiarScript(0)">Copiar script</button>
+        </div>
+      </div>
+      <div class="script-conteudo">
+        <div class="script-box">
+          <div class="script-box-titulo">Script 2 — Follow-up (não respondeu)</div>
+          <div class="script-texto" id="script-texto-1">Oi [Nome]! Aqui é o [Seu nome] novamente.
+
+Só queria deixar essa mensagem porque sei que a vida é corrida e as coisas somem no meio das notificações.
+
+Te mandei uma mensagem sobre uma oportunidade que pode mudar sua renda. Entendo se não for o momento certo.
+
+Mas se você tiver 2 minutos hoje, me fala — prefiro te contar pessoalmente do que você perder por falta de informação.
+
+Qualquer coisa, tô aqui.</div>
+          <button class="btn-copiar" onclick="copiarScript(1)">Copiar script</button>
+        </div>
+      </div>
+      <div class="script-conteudo">
+        <div class="script-box">
+          <div class="script-box-titulo">Script 3 — Depois de enviar o link do produto</div>
+          <div class="script-texto" id="script-texto-2">Oi [Nome]! Viu as informações que mandei?
+
+Quero te avisar: o preço que aparece lá é o de lançamento. Quando esse período acabar, sobe pra quase o triplo.
+
+Mas mais importante que o preço: tem garantia total de 7 dias. Você entra, testa tudo, e se não gostar, recebe o dinheiro de volta sem burocracia.
+
+O risco é zero. O que trava você agora?</div>
+          <button class="btn-copiar" onclick="copiarScript(2)">Copiar script</button>
+        </div>
+      </div>
+      <div class="script-conteudo">
+        <div class="script-box">
+          <div class="script-box-titulo">Script 4 — Criando urgência real</div>
+          <div class="script-texto" id="script-texto-3">[Nome], passando rápido.
+
+O preço especial de lançamento tá nos últimos dias. Depois ele volta ao valor cheio.
+
+Não tô dizendo isso pra te pressionar — tô dizendo porque seria injusto não te avisar e você ficar de fora por questão de timing.
+
+Se você tava pensando, agora é o momento. Qualquer dúvida antes de decidir, me fala aqui.</div>
+          <button class="btn-copiar" onclick="copiarScript(3)">Copiar script</button>
+        </div>
+      </div>
+      <div class="script-conteudo">
+        <div class="script-box">
+          <div class="script-box-titulo">Script 5 — Mensagem pós-compra (retendo o cliente)</div>
+          <div class="script-texto" id="script-texto-4">Seja muito bem-vindo(a), [Nome]!
+
+Você acabou de tomar uma das melhores decisões para sua renda. Agora é hora de colocar em prática.
+
+Minha recomendação: comece pelo Módulo 1 hoje, mesmo que sejam apenas 20 minutos. O momentum do começo é o mais valioso.
+
+Se travar em alguma parte ou tiver dúvida, me manda mensagem diretamente. Tô aqui.
+
+Bora mudar essa realidade.</div>
+          <button class="btn-copiar" onclick="copiarScript(4)">Copiar script</button>
+        </div>
+      </div>
+      <div class="script-conteudo">
+        <div class="script-box">
+          <div class="script-box-titulo">Script 6 — Pedindo indicação</div>
+          <div class="script-texto" id="script-texto-5">Oi [Nome], como tá indo o material?
+
+Fico feliz que você esteja aplicando! Tenho um favor para pedir.
+
+Você conhece alguém que também tá buscando uma forma de gerar renda extra? Alguém que trabalha CLT e quer sair do sufoco, ou que quer empreender mas não sabe por onde começar?
+
+Se me indicar e a pessoa entrar, posso te dar [bônus / desconto / agradecimento]. Mas mais que isso: você vai estar ajudando alguém que precisa.
+
+Me manda o nome ou já apresenta a gente. 🤝</div>
+          <button class="btn-copiar" onclick="copiarScript(5)">Copiar script</button>
+        </div>
+      </div>
+      <div class="script-conteudo">
+        <div class="script-box">
+          <div class="script-box-titulo">Script 7 — Reativando contato que sumiu</div>
+          <div class="script-texto" id="script-texto-6">Oi [Nome]! Faz um tempo que a gente não conversa.
+
+Sem pressão nenhuma — só queria checar se você ainda tá buscando uma forma de melhorar sua renda ou se a situação mudou.
+
+Tive alguns resultados novos desde que falamos pela última vez, e sei de pessoas com um perfil parecido com o seu que estão se dando muito bem.
+
+Se o timing for melhor agora, me fala. Se não for, sem problema também — fico por aqui.</div>
+          <button class="btn-copiar" onclick="copiarScript(6)">Copiar script</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<div class="cta-final">
+  <div class="container">
+    <h2 class="cta-titulo">Você tem tudo.<br><em>Agora execute.</em></h2>
+    <p class="cta-sub">O material está na sua mão. Cada módulo foi feito para você agir — não só ler. Comece pelo Módulo 1 agora.</p>
+    <a href="#mod1" class="cta-btn">Começar do Módulo 1 ↑</a>
+    <p style="margin-top:2rem; font-size:14px; color:#555">© 2026 Método Renda Real — Todos os direitos reservados</p>
+  </div>
+</div>
+
+<script>
+/* ===== BARRA DE PROGRESSO ===== */
+window.addEventListener('scroll', () => {
+  const total = document.body.scrollHeight - window.innerHeight;
+  const pct = Math.round((window.scrollY / total) * 100);
+  document.getElementById('barra-progresso').style.width = pct + '%';
+  document.getElementById('pct-leitura').textContent = pct + '%';
+});
+
+/* ===== OBJEÇÕES ===== */
+function toggleObjecao(header) {
+  const item = header.parentElement;
+  const aberto = item.classList.contains('aberto');
+  document.querySelectorAll('.objecao-item.aberto').forEach(i => i.classList.remove('aberto'));
+  if (!aberto) item.classList.add('aberto');
+}
+
+/* ===== SCRIPTS DE VENDA ===== */
+function mudarScript(idx) {
+  document.querySelectorAll('.script-tab').forEach((t,i) => t.classList.toggle('active', i===idx));
+  document.querySelectorAll('.script-conteudo').forEach((c,i) => c.classList.toggle('active', i===idx));
+}
+
+function copiarScript(idx) {
+  const texto = document.getElementById('script-texto-' + idx).innerText;
+  navigator.clipboard.writeText(texto).catch(() => {});
+  const btn = document.querySelectorAll('.btn-copiar')[idx];
+  btn.textContent = '✓ Copiado!';
+  btn.classList.add('copiado');
+  setTimeout(() => { btn.textContent = 'Copiar script'; btn.classList.remove('copiado'); }, 2000);
+}
+
+/* ===== TAREFAS 7 DIAS ===== */
+const dias = [
+  {
+    nome: 'Dia 1 — Escolha e setup',
+    objetivo: 'Objetivo: ter sua conta criada e o produto escolhido',
+    itens: [
+      { t: 'Crie conta na Hotmart (hotmart.com/sign-up)' },
+      { t: 'Navegue pelo Mercado de Produtos da Hotmart e escolha 1 produto com comissão acima de 40%' },
+      { t: 'Verifique se o produto tem boa página de vendas (leia como se fosse comprador)' },
+      { t: 'Gere seu link de afiliado para o produto escolhido' },
+      { t: 'Salve o link em lugar de fácil acesso no celular' },
+    ]
+  },
+  {
+    nome: 'Dia 2 — Conheça o produto',
+    objetivo: 'Objetivo: dominar o produto que você vai promover',
+    itens: [
+      { t: 'Leia a página de vendas completa do produto 2 vezes' },
+      { t: 'Anote os 5 maiores benefícios em suas palavras' },
+      { t: 'Anote para quem esse produto resolve um problema real' },
+      { t: 'Se possível, compre ou peça acesso de revisão (muitos produtores liberam)' },
+      { t: 'Escreva 3 frases sobre o produto que você usaria numa conversa natural' },
+    ]
+  },
+  {
+    nome: 'Dia 3 — Monte sua lista',
+    objetivo: 'Objetivo: identificar 50 pessoas que podem se interessar',
+    itens: [
+      { t: 'Abra sua lista de contatos e WhatsApp' },
+      { t: 'Liste 30 pessoas que têm o perfil do comprador ideal' },
+      { t: 'Encontre 20 pessoas em grupos do Facebook ou Telegram no nicho do produto' },
+      { t: 'Para cada pessoa, escreva brevemente por que ela pode se interessar' },
+      { t: 'Não envie nada ainda — só monte a lista' },
+    ]
+  },
+  {
+    nome: 'Dia 4 — Primeiras abordagens',
+    objetivo: 'Objetivo: iniciar 15 conversas usando o Script 1',
+    itens: [
+      { t: 'Personalize o Script 1 para o seu produto e tom de voz' },
+      { t: 'Envie para as 15 primeiras pessoas da sua lista' },
+      { t: 'Responda todas as respostas recebidas no mesmo dia' },
+      { t: 'Para quem perguntou mais, envie o link + explicação adicional' },
+      { t: 'Registre: quantos abriram, quantos responderam, quantos clicaram no link' },
+    ]
+  },
+  {
+    nome: 'Dia 5 — Follow-up e mais contatos',
+    objetivo: 'Objetivo: dar continuidade e expandir os contatos',
+    itens: [
+      { t: 'Envie o Script 2 para quem não respondeu ontem' },
+      { t: 'Envie a abordagem para mais 15 pessoas da sua lista' },
+      { t: 'Use o Script 3 com quem abriu mas não comprou' },
+      { t: 'Junte-se a 2 grupos novos no Facebook/Telegram do nicho' },
+      { t: 'Registre os resultados — compare com ontem' },
+    ]
+  },
+  {
+    nome: 'Dia 6 — Urgência e objeções',
+    objetivo: 'Objetivo: converter quem está indeciso',
+    itens: [
+      { t: 'Identifique quem está indeciso (respondeu mas não comprou)' },
+      { t: 'Aplique as respostas de objeção do Módulo 4' },
+      { t: 'Use o Script 4 (urgência) para quem teve engajamento' },
+      { t: 'Busque 10 pessoas novas para abordar' },
+      { t: 'Documente todas as objeções que surgiram — elas vão te tornar melhor' },
+    ]
+  },
+  {
+    nome: 'Dia 7 — Feche sua primeira venda',
+    objetivo: 'Objetivo: realizar a primeira venda e celebrar',
+    itens: [
+      { t: 'Faça contato com quem demonstrou mais interesse nos últimos dias' },
+      { t: 'Trate cada conversa como a mais importante — porque é' },
+      { t: 'Não tenha pressa: ouça, entenda a dor, apresente a solução' },
+      { t: 'Quando a venda acontecer, anote: o que funcionou nessa conversa?' },
+      { t: 'Se não aconteceu hoje: continue. A venda virá. O processo está correto.' },
+    ]
+  }
+];
+
+let diaAtual = 0;
+const estadoTarefas = dias.map(d => d.itens.map(() => false));
+
+function renderDia() {
+  const d = dias[diaAtual];
+  document.getElementById('dia-label').textContent = 'Dia ' + (diaAtual+1) + ' de 7';
+  document.getElementById('dia-nome').textContent = d.nome;
+  document.getElementById('dia-objetivo').textContent = d.objetivo;
+  const lista = document.getElementById('tarefa-lista');
+  lista.innerHTML = '';
+  d.itens.forEach((item, i) => {
+    const li = document.createElement('li');
+    li.className = 'tarefa-item' + (estadoTarefas[diaAtual][i] ? ' done' : '');
+    li.innerHTML = '<div class="tarefa-checkbox">' + (estadoTarefas[diaAtual][i] ? '✓' : '') + '</div><span class="tarefa-texto">' + item.t + '</span>';
+    li.onclick = () => {
+      estadoTarefas[diaAtual][i] = !estadoTarefas[diaAtual][i];
+      renderDia();
+    };
+    lista.appendChild(li);
+  });
+  const done = estadoTarefas[diaAtual].filter(Boolean).length;
+  const total = estadoTarefas[diaAtual].length;
+  const pct = Math.round((done/total)*100);
+  document.getElementById('tarefa-fill').style.width = pct + '%';
+  document.getElementById('tarefa-pct').textContent = pct + '%';
+  document.getElementById('btn-anterior').disabled = diaAtual === 0;
+  document.getElementById('btn-proximo').disabled = diaAtual === dias.length - 1;
+}
+
+function mudarDia(delta) {
+  diaAtual = Math.max(0, Math.min(dias.length-1, diaAtual+delta));
+  renderDia();
+}
+
+renderDia();
+</script>
+</body>
+</html>
